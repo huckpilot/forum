@@ -21,4 +21,4 @@
 ### I use the sendGrid api to send users emails with updates from the forum
 (https://sendgrid.com/docs/API_Reference/index.html "SendGrid Api")
 
-![Diagram](/huckpilot/forum/images/diagram.jpg?raw=true "Diagram")
+![Diagram](/images/diagram.jpg?raw=true "Diagram")
