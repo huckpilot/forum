@@ -22,3 +22,10 @@
 (https://sendgrid.com/docs/API_Reference/index.html "SendGrid Api")
 
 ![Diagram](/images/diagram.jpg?raw=true "Diagram")
+
+### ERD
+#### This entity relationship diagram between the category and post and the post and comment
+* There can be multiple posts to one category but there may only be one category for a post
+* There can be multiple comments to one post but there may only be one post for a comment.
+
+![ERD](/images/ERD.jpg?raw=true "ERD")
