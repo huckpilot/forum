@@ -21,4 +21,4 @@
 ### I use the sendGrid api to send users emails with updates from the forum
 (https://sendgrid.com/docs/API_Reference/index.html "SendGrid Api")
 
-![diagramOne](https://github.com/forum/images/diagram.jpg "Initial diagram")
+![alt tag](http://imgur.com/VfkiaUo)
