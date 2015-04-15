@@ -5,7 +5,7 @@
   <a href="/categories/new">Add a new category</a>
   <ul>
     <% for(var i = 0; i < categories.length; i++){ %>
-    <li><a href="/category/<%= categories[i].id %>"><%= categories[i].title %></a></br><%= categories[i].brief %></li><% } %>
+    <li><a href="/categories/<%= categories[i].id %>"><%= categories[i].title %></a></br><%= categories[i].brief %></li><% } %>
   </ul>
 
   <a href="/categories/new">Add a new category</a>

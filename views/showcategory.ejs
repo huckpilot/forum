@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <body>
   <h1><%= thisCategory[0].category_title %></h1>
+  <% if (thisCategory.length > 0) { %>
   <ul>
   <% for(var i = 0; i < thisCategory.length; i++){ %>
   <li><a href="/post/<%= thisCategory[i].id %>"><%= thisCategory[i].post_title %></a></li> <% } %>
   </ul>
+  <% } %>
   <a href="/categories">Go back home</a>
 </body>

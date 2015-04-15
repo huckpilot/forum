@@ -26,6 +26,8 @@ var methodOverride = require("method-override");
 // Tells app which override method to use
 app.use(methodOverride("_method"))
 
+
+
 // This redirects to /forum
 app.get("/", function(req, res) {
   res.redirect("/forum")
@@ -47,6 +49,18 @@ app.get("/categories", function(req, res){
   });
 });
 
+// Serve up a new page to create category
+app.get("/categories/new", function(req, res){
+  res.render("addcategory.ejs")
+});
+
+// Add the new category to your category page
+app.post("/categories", function(req, res){
+  db.run("INSERT INTO categories (title, brief, image) VALUES(?, ?, ?)", req.body.title, req.body.brief, req.body.image, function(err){
+    res.redirect("/categories")
+  });
+});
+
 // Show individual post
 app.get("/post/:id", function(req, res){
   db.get("SELECT * FROM posts WHERE id = ?", req.params.id, function(err, data){
@@ -55,14 +69,14 @@ app.get("/post/:id", function(req, res){
 });
 
 // Show individual category
-app.get("/category/:id", function(req, res){
+app.get("/categories/:id", function(req, res){
   db.all("SELECT posts.title AS post_title, posts.id, categories.title AS category_title FROM posts INNER JOIN categories ON posts.category_id = categories.id WHERE categories.id = ?", req.params.id, function(err, data){
     console.log(data);
     res.render("showCategory.ejs", {thisCategory: data})
   });
 });
 
-// Serve up a new page
+
 
 
 
