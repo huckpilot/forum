@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<body>
+<h1>Seeder</h1>
+<ul>
+  <% for(var i = 0; i < titles.length; i++){ %>
+  <li><a href="/post/<%= titles[i].id %>"><%= titles[i].title %></a></li> <% } %>
+</ul>
+</body>
+<html>
