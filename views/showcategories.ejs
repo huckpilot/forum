@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<body>
+  <h1>Categories</h1>
+</br>
+  <a href="/categories/new">Add a new category</a>
+  <ul>
+    <% for(var i = 0; i < categories.length; i++){ %>
+    <li><a href="/category/<%= categories[i].id %>"><%= categories[i].title %></a></br><%= categories[i].brief %></li><% } %>
+  </ul>
+
+  <a href="/categories/new">Add a new category</a>
+  </br>
+  <a href="/forum">Head back home</a>
+</body>
+</html>

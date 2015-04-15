@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <body>
 <h1>Seeder</h1>
+<div>
 <ul>
   <% for(var i = 0; i < pTitles.length; i++){ %>
   <li><a href="/post/<%= pTitles[i].id %>"><%= pTitles[i].title %></a></li> <% } %>
 </ul>
+</div>
+<div>
 <ul>
   <% for(var i = 0; i < cTitles.length; i++){ %>
   <li><a href="/post/<%= cTitles[i].id %>"><%= cTitles[i].title %></a></li> <% } %>
 </ul>
+</div>
 
 <a href="/categories/new">Add a new category</a>
+</br>
+<a href="/categories">See all categories</a>
 </body>
 <html>

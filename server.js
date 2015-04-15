@@ -34,38 +34,35 @@ app.get("/", function(req, res) {
 // This page is going to show all posts and all categories
 app.get("/forum", function(req, res) {
   db.all("SELECT posts.title, posts.id FROM posts", function(err, data1) {
-    db.all("SELECT categories.title, categories.brief, categories.id FROM categories", function(err, data2) {
+    db.all("SELECT categories.title, categories.id FROM categories", function(err, data2) {
       res.render("index.ejs", {pTitles: data1, cTitles: data2})
     });
+  });
+});
+
+// This page will show all categories
+app.get("/categories", function(req, res){
+  db.all("SELECT categories.title, categories.brief, categories.id FROM categories", function(err, data){
+    res.render("showCategories.ejs", {categories: data})
   });
 });
 
 // Show individual post
 app.get("/post/:id", function(req, res){
   db.get("SELECT * FROM posts WHERE id = ?", req.params.id, function(err, data){
-    res.render("show.ejs", {thisPost: data})
+    res.render("showPost.ejs", {thisPost: data})
   });
 });
 
+// Show individual category
+app.get("/category/:id", function(req, res){
+  db.all("SELECT posts.title AS post_title, posts.id, categories.title AS category_title FROM posts INNER JOIN categories ON posts.category_id = categories.id WHERE categories.id = ?", req.params.id, function(err, data){
+    console.log(data);
+    res.render("showCategory.ejs", {thisCategory: data})
+  });
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Serve up a new page
 
 
 
