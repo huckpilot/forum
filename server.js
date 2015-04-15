@@ -17,7 +17,9 @@ app.set("view engine", "ejs");
 // Body-parser allows me to parse through a body
 var bodyParser = require("body-parser");
 // Tells app which method to use while parsing
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({
+  extended: false
+}))
 
 // allows for method-override
 var methodOverride = require("method-override");
@@ -25,20 +27,53 @@ var methodOverride = require("method-override");
 app.use(methodOverride("_method"))
 
 // This redirects to /forum
-app.get("/", function(req, res){
+app.get("/", function(req, res) {
   res.redirect("/forum")
 });
 
 // This page is going to show all posts and all categories
-app.get("/forum", function(req, res){
-  db.all("SELECT posts.title, posts.id FROM posts", function(err, data){
-    console.log(data);
-    res.render("index.ejs", {titles: data})
+app.get("/forum", function(req, res) {
+  db.all("SELECT posts.title, posts.id FROM posts", function(err, data1) {
+    db.all("SELECT categories.title, categories.brief, categories.id FROM categories", function(err, data2) {
+      res.render("index.ejs", {pTitles: data1, cTitles: data2})
+    });
   });
-  // db.allow("SELECT categories.title FROM categories", function(err, data){
-  //   res.render("index.ejs", {categoriesTitle: data})
-  // });
 });
+
+// Show individual post
+app.get("/post/:id", function(req, res){
+  db.get("SELECT * FROM posts WHERE id = ?", req.params.id, function(err, data){
+    res.render("show.ejs", {thisPost: data})
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //This closes out th server and listens for the post
 app.listen(3000);
