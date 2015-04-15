@@ -61,6 +61,11 @@ app.post("/categories", function(req, res){
   });
 });
 
+// Serve up a new page to create post
+app.get("/categories/new", function(req, res){
+  res.render("addpost.ejs")
+})
+
 // Show individual post
 app.get("/post/:id", function(req, res){
   db.get("SELECT * FROM posts WHERE id = ?", req.params.id, function(err, data){
@@ -68,15 +73,15 @@ app.get("/post/:id", function(req, res){
   });
 });
 
+
 // Show individual category
 app.get("/categories/:id", function(req, res){
-  db.all("SELECT posts.title AS post_title, posts.id, categories.title AS category_title FROM posts INNER JOIN categories ON posts.category_id = categories.id WHERE categories.id = ?", req.params.id, function(err, data){
-    console.log(data);
-    res.render("showCategory.ejs", {thisCategory: data})
+  db.get("SELECT categories.title FROM categories WHERE id = ?", req.params.id, function(err, data1){
+    db.all("SELECT posts.title, posts.id FROM posts WHERE category_id = ?", req.params.id, function(err, data2){
+      res.render("showCategory.ejs", {thisCategory: data1, posts: data2})
+    });
   });
 });
-
-
 
 
 

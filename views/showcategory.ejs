@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <body>
-  <h1><%= thisCategory[0].category_title %></h1>
-  <% if (thisCategory.length > 0) { %>
+  <h1><%= thisCategory.title %></h1>
   <ul>
-  <% for(var i = 0; i < thisCategory.length; i++){ %>
-  <li><a href="/post/<%= thisCategory[i].id %>"><%= thisCategory[i].post_title %></a></li> <% } %>
+  <% for(var i = 0; i < posts.length; i++){ %>
+  <li><a href="/post/<%= posts[i].id %>"><%= posts[i].title %></a></li> <% } %>
   </ul>
-  <% } %>
+  </br>
+  <a href="/posts/new">Create a new post</a>
+  </br>
   <a href="/categories">Go back home</a>
 </body>
