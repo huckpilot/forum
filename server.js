@@ -102,7 +102,7 @@ app.get("/category/:id", function(req, res){
 // Delete a post
 app.delete("/post/:id", function(req, res){
   db.run("DELETE FROM posts WHERE id = ?", req.params.id, function(err){
-    res.redirect("/category/:id");
+    res.redirect("/forum");
   })
 })
 

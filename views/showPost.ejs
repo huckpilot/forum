@@ -7,7 +7,7 @@
     <img src="<%= thisPost.image %>"
   </div>
   </br>
-  <form method="POST" action="?_method=DELETE">
+  <form method="POST" action="/post/<%= thisPost.id %>?_method=DELETE">
     <button>Delete this post</button>
   </form>
   </br>
