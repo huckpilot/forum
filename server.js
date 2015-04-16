@@ -54,7 +54,7 @@ app.get("/categories/new", function(req, res){
   res.render("addcategory.ejs")
 });
 
-// Add the new category to your category page
+// Add the new category to your categories page
 app.post("/categories", function(req, res){
   db.run("INSERT INTO categories (title, brief, image) VALUES(?, ?, ?)", req.body.title, req.body.brief, req.body.image, function(err){
     res.redirect("/categories")
@@ -62,9 +62,21 @@ app.post("/categories", function(req, res){
 });
 
 // Serve up a new page to create post
-app.get("/categories/new", function(req, res){
-  res.render("addpost.ejs")
+app.get("/category/:id/newpost", function(req, res){
+  db.all("SELECT * FROM categories WHERE id = ?", req.params.id, function(err, data){
+    // req.params id here is the id associated with the category
+    console.log(data)
+  res.render("addpost.ejs", {categoryId: data})
+  })
+
 })
+
+// Add the new post to your category page
+app.post("/category/:id", function(req, res){
+  db.run("INSERT INTO posts (title, body, image, category_id) VALUES(?, ?, ?, ?)", req.body.title, req.body.body, req.body.image, req.params.id, function(err){
+    res.redirect("/category/"+ req.params.id)
+  });
+});
 
 // Show individual post
 app.get("/post/:id", function(req, res){
@@ -75,8 +87,8 @@ app.get("/post/:id", function(req, res){
 
 
 // Show individual category
-app.get("/categories/:id", function(req, res){
-  db.get("SELECT categories.title FROM categories WHERE id = ?", req.params.id, function(err, data1){
+app.get("/category/:id", function(req, res){
+  db.get("SELECT categories.title, categories.id FROM categories WHERE id = ?", req.params.id, function(err, data1){
     db.all("SELECT posts.title, posts.id FROM posts WHERE category_id = ?", req.params.id, function(err, data2){
       res.render("showCategory.ejs", {thisCategory: data1, posts: data2})
     });
