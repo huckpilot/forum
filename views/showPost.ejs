@@ -7,7 +7,10 @@
     <img src="<%= thisPost.image %>"
   </div>
   </br>
-  ////////Here is a downvote button and an upvote button. Maybe it could be a PUT because I am updating a record. I will need an input field here to recieve a value that I will PUT in app.put. Look into hidden inputs.
+  <form method="POST" action="/category/<%= thisPost.category_id %>/post/<%= thisPost.id %>/comments">
+    <input type="text" name="body" placeholder="comment here">
+    <button>Add comment</button>
+  </form>
   <form method="POST" action="/post/<%= thisPost.id %>?_method=DELETE">
     <button>Delete this post</button>
   </form>
