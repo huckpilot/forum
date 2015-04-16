@@ -36,9 +36,9 @@ app.get("/", function(req, res) {
 // This page is going to show all posts and all categories
 app.get("/forum", function(req, res) {
   db.all("SELECT posts.title, posts.id, category_id FROM posts", function(err, data1) {
-    console.log(data1)
+    //console.log(data1)
     db.all("SELECT categories.title, categories.id FROM categories", function(err, data2) {
-      console.log(data2)
+      //console.log(data2)
       res.render("index.ejs", {
         pTitles: data1,
         cTitles: data2
@@ -76,7 +76,7 @@ app.post("/categories", function(req, res) {
 app.get("/category/:id/newpost", function(req, res) {
   db.all("SELECT * FROM categories WHERE id = ?", req.params.id, function(err, data) {
     // req.params id here is the id associated with the category
-    console.log(data)
+    //console.log(data)
     res.render("addpost.ejs", {
       categoryId: data
     })
@@ -95,10 +95,13 @@ app.post("/category/:id", function(req, res) {
 // Show individual post
 app.get("/category/:categoryid/post/:id", function(req, res) {
   db.get("SELECT * FROM posts WHERE id = ?", req.params.id, function(err, data1) {
-    db.all("SELECT categories.id FROM categories WHERE id = ?", req.params.id, function(err, data2) {
+    console.log(data1)
+    db.all("SELECT comments.user_id, comments.body FROM comments WHERE post_id = ?", req.params.id, function(err, data2) {
+      if (err) throw(err);
+      console.log(data2)
       res.render("showPost.ejs", {
         thisPost: data1,
-        thisCategory: data2
+        comments: data2
       })
     });
   });
@@ -107,7 +110,7 @@ app.get("/category/:categoryid/post/:id", function(req, res) {
 ////////////////////////////////////////////////
 // This will add the comment made on the showPost to the database
 app.post("/category/:categoryid/post/:id/comments", function(req, res){
-  db.run("INSERT INTO comments (body), VALUES (?)", req.body.body, function(err){
+  db.run("INSERT INTO comments (post_id, body) VALUES (?, ?)", req.params.id, req.body.body, function(err){
     res.redirect("/category/" + req.params.categoryid + "/post/"+ req.params.id)
   });
 });
