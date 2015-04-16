@@ -39,75 +39,123 @@ app.get("/forum", function(req, res) {
     console.log(data1)
     db.all("SELECT categories.title, categories.id FROM categories", function(err, data2) {
       console.log(data2)
-      res.render("index.ejs", {pTitles: data1, cTitles: data2})
+      res.render("index.ejs", {
+        pTitles: data1,
+        cTitles: data2
+      })
     });
   });
 });
 
 // This page will show all categories
-app.get("/categories", function(req, res){
-  db.all("SELECT categories.title, categories.brief, categories.id FROM categories", function(err, data){
-    res.render("showCategories.ejs", {categories: data})
+app.get("/categories", function(req, res) {
+  db.all("SELECT categories.title, categories.brief, categories.id FROM categories", function(err, data) {
+    res.render("showCategories.ejs", {
+      categories: data
+    })
   });
 });
 
 // Serve up a new page to create category
-app.get("/categories/new", function(req, res){
+app.get("/categories/new", function(req, res) {
   res.render("addcategory.ejs")
 });
 
 // Add the new category to your categories page
-app.post("/categories", function(req, res){
-  db.run("INSERT INTO categories (title, brief, image) VALUES(?, ?, ?)", req.body.title, req.body.brief, req.body.image, function(err){
+app.post("/categories", function(req, res) {
+  db.run("INSERT INTO categories (title, brief, image) VALUES(?, ?, ?)", req.body.title, req.body.brief, req.body.image, function(err) {
     res.redirect("/categories")
   });
 });
 
 // Serve up a new page to create post
-app.get("/category/:id/newpost", function(req, res){
-  db.all("SELECT * FROM categories WHERE id = ?", req.params.id, function(err, data){
+app.get("/category/:id/newpost", function(req, res) {
+  db.all("SELECT * FROM categories WHERE id = ?", req.params.id, function(err, data) {
     // req.params id here is the id associated with the category
     console.log(data)
-  res.render("addpost.ejs", {categoryId: data})
+    res.render("addpost.ejs", {
+      categoryId: data
+    })
   })
 
 })
 
 // Add the new post to your category page
-app.post("/category/:id", function(req, res){
-  db.run("INSERT INTO posts (title, body, image, category_id) VALUES(?, ?, ?, ?)", req.body.title, req.body.body, req.body.image, req.params.id, function(err){
-    res.redirect("/category/"+ req.params.id)
+app.post("/category/:id", function(req, res) {
+  db.run("INSERT INTO posts (title, body, image, category_id) VALUES(?, ?, ?, ?)", req.body.title, req.body.body, req.body.image, req.params.id, function(err) {
+    res.redirect("/category/" + req.params.id)
   });
 });
 
 // Show individual post
-app.get("/category/:id/post/:id", function(req, res){
-  db.get("SELECT * FROM posts WHERE id = ?", req.params.id, function(err, data1){
-    db.all("SELECT categories.id FROM categories WHERE id = ?", req.params.id, function(err, data2){
-      res.render("showPost.ejs", {thisPost: data1, thisCategory: data2})
+app.get("/category/:id/post/:id", function(req, res) {
+  db.get("SELECT * FROM posts WHERE id = ?", req.params.id, function(err, data1) {
+    db.all("SELECT categories.id FROM categories WHERE id = ?", req.params.id, function(err, data2) {
+      res.render("showPost.ejs", {
+        thisPost: data1,
+        thisCategory: data2
+      })
     });
   });
 });
 
 
+// // This is where I increase/decrease my up/downvote counter
+// app.put("I will recieve information here", function(req, res){
+//   db.get("SELECT posts.vote FROM posts WHERE posts.id = ?", req.params.id, function(err, data1){
+//     if (req.body.vote === "up") {
+//       votes = data1 + 1;
+//       db.run("INSERT INTO posts (vote) VALUES (?)", votes, function(err){} 
+//       else {
+//       votes = data1 - 1;
+//       db.run("INSERT INTO posts (vote) VALUES (?)", votes, function(err){}
+//     }
+
+//     }) 
+//   })
+// })
+
 // Show individual category
-app.get("/category/:id", function(req, res){
-  db.get("SELECT categories.title, categories.id FROM categories WHERE id = ?", req.params.id, function(err, data1){
-    db.all("SELECT posts.title, posts.id FROM posts WHERE category_id = ?", req.params.id, function(err, data2){
-      res.render("showCategory.ejs", {thisCategory: data1, posts: data2})
+app.get("/category/:id", function(req, res) {
+  db.get("SELECT categories.title, categories.id FROM categories WHERE id = ?", req.params.id, function(err, data1) {
+    db.all("SELECT posts.title, posts.id FROM posts WHERE category_id = ?", req.params.id, function(err, data2) {
+      res.render("showCategory.ejs", {
+        thisCategory: data1,
+        posts: data2, 
+        err: ""
+      })
     });
   });
 });
 
 // Delete a post
-app.delete("/post/:id", function(req, res){
-  db.run("DELETE FROM posts WHERE id = ?", req.params.id, function(err){
+app.delete("/post/:id", function(req, res) {
+  db.run("DELETE FROM posts WHERE id = ?", req.params.id, function(err) {
     res.redirect("/forum");
   })
 })
 
+// IF there are no posts in a category, delete category is enabled.
+app.delete("/category/:id", function(req, res) {
+  db.all("SELECT * FROM posts WHERE category_id = ?", req.params.id, function(err, data) {
+    if (data.length === 0) {
+      db.run("DELETE FROM categories WHERE id = ?", req.params.id, function(err) {
+        res.redirect("/categories")
+      })
+    } else {
+  db.get("SELECT categories.title, categories.id FROM categories WHERE id = ?", req.params.id, function(err, data1) {
+    db.all("SELECT posts.title, posts.id FROM posts WHERE category_id = ?", req.params.id, function(err, data2) {
+      res.render("showCategory.ejs", {
+        thisCategory: data1,
+        posts: data2,
+        err: "Cannot delete categories with posts"
+      })
+    });
+  });
+    }
+  });
 
-
+});
 
 
 

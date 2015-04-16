@@ -6,6 +6,13 @@
   <li><a href="/category/<%= thisCategory.id %>/post/<%= posts[i].id %>"><%= posts[i].title %></a></li> <% } %>
   </ul>
   </br>
+  <% if(err) { %>
+  <p><%= err %></p>
+  <% } %>
+  <form method="POST" action="/category/<%= thisCategory.id %>?_method=DELETE">
+    <button>Delete this category</button>
+  </form>
+  </br>
   <a href="/category/<%= thisCategory.id %>/newpost">Create a new post</a>
   </br>
   <a href="/categories">Go back to categories list</a>
