@@ -4,7 +4,7 @@
 <div>
 <ul>
   <% for(var i = 0; i < pTitles.length; i++){ %>
-  <li><a href="/post/<%= pTitles[i].id %>"><%= pTitles[i].title %></a></li> <% } %>
+  <li><a href="/category/<%= pTitles[i].category_id %>/post/<%= pTitles[i].id %>"><%= pTitles[i].title %></a></li> <% } %>
 </ul>
 </div>
 <div>

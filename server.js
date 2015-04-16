@@ -35,8 +35,10 @@ app.get("/", function(req, res) {
 
 // This page is going to show all posts and all categories
 app.get("/forum", function(req, res) {
-  db.all("SELECT posts.title, posts.id FROM posts", function(err, data1) {
+  db.all("SELECT posts.title, posts.id, category_id FROM posts", function(err, data1) {
+    console.log(data1)
     db.all("SELECT categories.title, categories.id FROM categories", function(err, data2) {
+      console.log(data2)
       res.render("index.ejs", {pTitles: data1, cTitles: data2})
     });
   });
@@ -79,9 +81,11 @@ app.post("/category/:id", function(req, res){
 });
 
 // Show individual post
-app.get("/post/:id", function(req, res){
-  db.get("SELECT * FROM posts WHERE id = ?", req.params.id, function(err, data){
-    res.render("showPost.ejs", {thisPost: data})
+app.get("/category/:id/post/:id", function(req, res){
+  db.get("SELECT * FROM posts WHERE id = ?", req.params.id, function(err, data1){
+    db.all("SELECT categories.id FROM categories WHERE id = ?", req.params.id, function(err, data2){
+      res.render("showPost.ejs", {thisPost: data1, thisCategory: data2})
+    });
   });
 });
 
@@ -95,8 +99,12 @@ app.get("/category/:id", function(req, res){
   });
 });
 
-
-
+// Delete a post
+app.delete("/post/:id", function(req, res){
+  db.run("DELETE FROM posts WHERE id = ?", req.params.id, function(err){
+    res.redirect("/category/:id");
+  })
+})
 
 
 

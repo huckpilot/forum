@@ -7,7 +7,11 @@
     <img src="<%= thisPost.image %>"
   </div>
   </br>
+  <form method="POST" action="?_method=DELETE">
+    <button>Delete this post</button>
+  </form>
+  </br>
   <p>Comment on this post</p>
   </br>
-  <a href="/categories/<%= thisPost.id %>">Go back to the category</a>
+  <a href="/category/<%= thisPost.category_id %>">Go back to the category</a>
 </body>

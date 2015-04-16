@@ -3,10 +3,10 @@
   <h1><%= thisCategory.title %></h1>
   <ul>
   <% for(var i = 0; i < posts.length; i++){ %>
-  <li><a href="/post/<%= posts[i].id %>"><%= posts[i].title %></a></li> <% } %>
+  <li><a href="/category/<%= thisCategory.id %>/post/<%= posts[i].id %>"><%= posts[i].title %></a></li> <% } %>
   </ul>
   </br>
   <a href="/category/<%= thisCategory.id %>/newpost">Create a new post</a>
   </br>
-  <a href="/categories">Go back home</a>
+  <a href="/categories">Go back to categories list</a>
 </body>
