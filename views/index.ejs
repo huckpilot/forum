@@ -89,6 +89,8 @@ div#catBox {
   <% for(var i = 0; i < pTitles.length; i++){ %>
   <li id="posts"><a href="/category/<%= pTitles[i].category_id %>/post/<%= pTitles[i].id %>"><%= pTitles[i].body %></a></li> <% } %>
 </ul>
+<a href="/forum?offset=<%= pagination %>">More</a>
+
 </div>
 <div id="catBox">
 <h1>Newest seeds</h1>

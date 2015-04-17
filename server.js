@@ -35,13 +35,15 @@ app.get("/", function(req, res) {
 ////////////////////////////////////////////////
 // This page is going to show all posts and all categories
 app.get("/forum", function(req, res) {
-  db.all("SELECT posts.title, posts.body, posts.id, category_id FROM posts", function(err, data1) {
+  if(req.query.offset === undefined) { req.query.offset = 0; }
+  db.all("SELECT posts.title, posts.body, posts.id, category_id FROM posts LIMIT 3 OFFSET ?", req.query.offset, function(err, data1) {
     //console.log(data1)
     db.all("SELECT categories.title, categories.id FROM categories", function(err, data2) {
       //console.log(data2)
       res.render("index.ejs", {
         pTitles: data1,
-        cTitles: data2
+        cTitles: data2,
+        pagination: parseInt(req.query.offset) + 3,
       })
     });
   });
