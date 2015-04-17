@@ -53,7 +53,7 @@ app.get("/forum", function(req, res) {
 // This page will show all categories
 app.get("/categories", function(req, res) {
   db.all("SELECT categories.title, categories.brief, categories.id FROM categories", function(err, data) {
-    res.render("showCategories.ejs", {
+    res.render("showcategories.ejs", {
       categories: data
     })
   });
@@ -144,7 +144,7 @@ app.put("/category/:categoryid/post/:id/vote", function(req, res) {
 app.get("/category/:id", function(req, res) {
   db.get("SELECT categories.title, categories.id FROM categories WHERE id = ?", req.params.id, function(err, data1) {
     db.all("SELECT posts.title, posts.id FROM posts WHERE category_id = ?", req.params.id, function(err, data2) {
-      res.render("showCategory.ejs", {
+      res.render("showcategory.ejs", {
         thisCategory: data1,
         posts: data2,
         err: ""
@@ -172,7 +172,7 @@ app.delete("/category/:id", function(req, res) {
     } else {
       db.get("SELECT categories.title, categories.id FROM categories WHERE id = ?", req.params.id, function(err, data1) {
         db.all("SELECT posts.title, posts.id FROM posts WHERE category_id = ?", req.params.id, function(err, data2) {
-          res.render("showCategory.ejs", {
+          res.render("showcategory.ejs", {
             thisCategory: data1,
             posts: data2,
             err: "Cannot delete categories with posts"
