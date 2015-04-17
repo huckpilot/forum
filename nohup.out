@@ -1,0 +1,19 @@
+Listening on port 80
+Listening on port 80
+Listening on port 80
+TypeError: /root/forum/views/showPost.ejs:3
+    1| <!DOCTYPE html>
+    2| <body>
+ >> 3|   <h1><%= thisPost.title %></h1>
+    4|   <h5><%= thisPost.body %></h5>
+    5|   </br>
+    6|   <h5>Seed Quality: <%= thisPost.vote %></h5>
+
+Cannot read property 'title' of undefined
+    at eval (eval at <anonymous> (/root/forum/node_modules/ejs/lib/ejs.js:455:12), <anonymous>:10:36)
+    at /root/forum/node_modules/ejs/lib/ejs.js:482:14
+    at View.exports.renderFile [as engine] (/root/forum/node_modules/ejs/lib/ejs.js:348:31)
+    at View.render (/root/forum/node_modules/express/lib/view.js:93:8)
+    at EventEmitter.app.render (/root/forum/node_modules/express/lib/application.js:566:10)
+    at ServerResponse.res.render (/root/forum/node_modules/express/lib/response.js:938:7)
+    at Statement.<anonymous> (/root/forum/server.js:104:11)
