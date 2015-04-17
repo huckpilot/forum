@@ -57,7 +57,7 @@ END;
 DROP TABLE IF EXISTS subscriptions;
 CREATE TABLE subscriptions (
   id INTEGER PRIMARY KEY,
-  user_id INT, category_id INT, post_id INT,
+  email TEXT, category_id INT, post_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
