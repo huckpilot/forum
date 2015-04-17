@@ -26,6 +26,20 @@ var methodOverride = require("method-override");
 // Tells app which override method to use
 app.use(methodOverride("_method"))
 
+// require marked
+var marked = require('marked');
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false
+});
+
+
 ////////////////////////////////////////////////
 // This redirects to /forum
 app.get("/", function(req, res) {
@@ -93,17 +107,26 @@ app.post("/category/:id", function(req, res) {
   });
 });
 
+
 ////////////////////////////////////////////////
 // Show individual post
 app.get("/category/:categoryid/post/:id", function(req, res) {
   db.get("SELECT * FROM posts WHERE id = ?", req.params.id, function(err, data1) {
+      var markdownArr = []
+      // console.log(data1)
+        for (i in data1){
+        markdownArr.push(data1.body)
+        }
+      // console.log(markdownArr)
+      var mark = markdownArr[0]
+      var marky = marked(mark)
     //console.log(data1)
     db.all("SELECT comments.user_id, comments.body FROM comments WHERE post_id = ?", req.params.id, function(err, data2) {
       if (err) throw (err);
-      //console.log(data2)
       res.render("showPost.ejs", {
         thisPost: data1,
-        comments: data2
+        comments: data2,
+        marky: marky,
       })
     });
   });
@@ -186,5 +209,5 @@ app.delete("/category/:id", function(req, res) {
 
 ////////////////////////////////////////////////
 //This closes out th server and listens for the post
-app.listen(80);
+app.listen(3000);
 console.log("Listening on port 80")
