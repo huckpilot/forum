@@ -1,10 +1,19 @@
 <!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>  
+<script src="http://listjs.com/no-cdn/list.js"></script>
+<script src="http://listjs.com/no-cdn/list.pagination.js"></script>
+<script src="jquery-1.11.2.min.js"></script>
+<meta charset=utf-8 />
+<title>page</title>
+</head>
 <body>
 <h1>Seeder</h1>
 <div>
 <ul>
   <% for(var i = 0; i < pTitles.length; i++){ %>
-  <li><a href="/category/<%= pTitles[i].category_id %>/post/<%= pTitles[i].id %>"><%= pTitles[i].title %></a></li> <% } %>
+  <li class="name"><a href="/category/<%= pTitles[i].category_id %>/post/<%= pTitles[i].id %>"><%= pTitles[i].title %></a></li> <% } %>
 </ul>
 </div>
 <div>

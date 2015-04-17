@@ -1,5 +1,8 @@
 //This is my... FORUM! dum dum dum!...
 
+////////////////////////////////////////////////////////////////
+// Admin Stuff
+
 // Get access to the sqlite3 module
 var sqlite3 = require("sqlite3");
 
@@ -25,6 +28,16 @@ app.use(bodyParser.urlencoded({
 var methodOverride = require("method-override");
 // Tells app which override method to use
 app.use(methodOverride("_method"))
+
+var pageList = new List('test-list', {
+  valueNames: ['name'],
+  page: 3,
+  plugins: [ ListPagination({}) ] 
+});
+
+
+////////////////////////////////////////////////////////////////
+// Fun Stuff
 
 ////////////////////////////////////////////////
 // This redirects to /forum
