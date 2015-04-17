@@ -1,6 +1,8 @@
 # forum
 ## This is a forum I am creating using CRUD
 
+![Mockup](/images/seeder.jpg?raw=true "Mockup")
+
 ### A forum that will allow users to:
 * create a new category and add a description to it (think subreddits on reddit)
 * create a new forum post in a given category (/categories/category-name/posts/new)
