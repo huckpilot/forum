@@ -56,10 +56,10 @@ db.run("INSERT INTO users (email, username) VALUES (?, ?), (?, ?), (?, ?)",
 
 ////////////
 
-db.run("INSERT INTO subscriptions (user_id, category_id, post_id) VALUES (?, ?, ?), (?, ?, ?), (?, ?, ?)",
-  1, 1, 1,
-  2, 1, 1,
-  3, 1, 1,
+db.run("INSERT INTO subscriptions (email, category_id, post_id) VALUES (?, ?, ?), (?, ?, ?), (?, ?, ?)",
+  "huckpilot@gmail.com", 1, 1,
+  "huckpilot@gmail.com", 1, 1,
+  "huckpilot@gmail.com", 1, 1,
   function(err) {
     if (err) {
       throw err;

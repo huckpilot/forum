@@ -88,6 +88,14 @@ app.post("/categories", function(req, res) {
 });
 
 ////////////////////////////////////////////////
+// Add email to subscriptions table and redirect to the specified category and id
+app.post("/subscriptions", function(req, res){
+  db.run("INSERT INTO subscriptions (email) VALUES (?)", req.body.email, function(err){
+    res.redirect("/category/"+ req.body.category_id)
+  });
+});
+
+////////////////////////////////////////////////
 // Serve up a new page to create post
 app.get("/category/:id/newpost", function(req, res) {
   db.all("SELECT * FROM categories WHERE id = ?", req.params.id, function(err, data) {
@@ -209,5 +217,5 @@ app.delete("/category/:id", function(req, res) {
 
 ////////////////////////////////////////////////
 //This closes out th server and listens for the post
-app.listen(80);
-console.log("Listening on port 80")
+app.listen(3000);
+console.log("Listening on port 3000")
