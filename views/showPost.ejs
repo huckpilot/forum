@@ -3,12 +3,28 @@
   <h1><%= thisPost.title %></h1>
   <h5><%= thisPost.body %></h5>
   </br>
+  <h5>Seed Quality: <%= thisPost.vote %></h5>
   <div>
     <img src="<%= thisPost.image %>"
   </div>
 
   </br>
 
+
+
+<!-- This is my vote section -->
+
+<form method="POST" action="/category/<%= thisPost.category_id %>/post/<%= thisPost.id %>/vote/?_method=PUT">
+  <input type="hidden" name="vote" value="up">
+  <button>Good seed</button>
+</form>
+<form method="POST" action="/category/<%= thisPost.category_id %>/post/<%= thisPost.id %>/vote/?_method=PUT">
+  <input type="hidden" name="vote" value="down">
+  <button>Bad seed</button>
+</form>
+
+
+<!-- This is my comment section -->
 
   <form method="POST" action="/category/<%= thisPost.category_id %>/post/<%= thisPost.id %>/comments">
     <input type="text" name="body" placeholder="comment here">
@@ -21,6 +37,10 @@
     <li><%= comments[i].body %></li> <% } %>
   </ul>
   </div>
+
+<!-- This is my comment section -->
+
+
 
   <form method="POST" action="/post/<%= thisPost.id %>?_method=DELETE">
     <button>Delete this post</button>

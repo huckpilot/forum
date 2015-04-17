@@ -95,10 +95,10 @@ app.post("/category/:id", function(req, res) {
 // Show individual post
 app.get("/category/:categoryid/post/:id", function(req, res) {
   db.get("SELECT * FROM posts WHERE id = ?", req.params.id, function(err, data1) {
-    console.log(data1)
+    //console.log(data1)
     db.all("SELECT comments.user_id, comments.body FROM comments WHERE post_id = ?", req.params.id, function(err, data2) {
-      if (err) throw(err);
-      console.log(data2)
+      if (err) throw (err);
+      //console.log(data2)
       res.render("showPost.ejs", {
         thisPost: data1,
         comments: data2
@@ -109,27 +109,33 @@ app.get("/category/:categoryid/post/:id", function(req, res) {
 
 ////////////////////////////////////////////////
 // This will add the comment made on the showPost to the database
-app.post("/category/:categoryid/post/:id/comments", function(req, res){
-  db.run("INSERT INTO comments (post_id, body) VALUES (?, ?)", req.params.id, req.body.body, function(err){
-    res.redirect("/category/" + req.params.categoryid + "/post/"+ req.params.id)
+app.post("/category/:categoryid/post/:id/comments", function(req, res) {
+  db.run("INSERT INTO comments (post_id, body) VALUES (?, ?)", req.params.id, req.body.body, function(err) {
+    res.redirect("/category/" + req.params.categoryid + "/post/" + req.params.id)
   });
 });
 
-////////////////////////////////////////////////
-// This is where I increase/decrease my up/downvote counter
-// app.put("category/:id/post/:id", function(req, res){
-//   db.get("SELECT posts.vote FROM posts WHERE posts.id = ?", req.params.id, function(err, data1){
-//     if (req.body.vote === "up") {
-//       votes = data1 + 1;
-//       db.run("INSERT INTO posts (vote) VALUES (?)", votes, function(err){} 
-//       else {
-//       votes = data1 - 1;
-//       db.run("INSERT INTO posts (vote) VALUES (?)", votes, function(err){}
-//     }
-
-//     }) 
-//   })
-// })
+//////////////////////////////////////////////
+// This is where I increase/decrease my up/down vote counter
+app.put("/category/:categoryid/post/:id/vote", function(req, res) {
+  db.get("SELECT posts.vote FROM posts WHERE posts.id = ?", req.params.id, function(err, data1) {
+    var voter = data1.vote;
+    //console.log(voter)
+    if (req.body.vote === "up") {
+      var votes = voter + 1;
+      //console.log(votes)
+      db.run("UPDATE posts SET vote = ? WHERE id = ?", votes, req.params.id, function(err) {
+        res.redirect("/category/" + req.params.categoryid + "/post/" + req.params.id)
+      });
+    } 
+    else {
+      var votes = voter - 1;
+      db.run("UPDATE posts SET vote = ? WHERE id = ?", votes, req.params.id, function(err) {
+        res.redirect("/category/" + req.params.categoryid + "/post/" + req.params.id)
+      });
+    }
+  });
+});
 
 ////////////////////////////////////////////////
 // Show individual category
@@ -138,7 +144,7 @@ app.get("/category/:id", function(req, res) {
     db.all("SELECT posts.title, posts.id FROM posts WHERE category_id = ?", req.params.id, function(err, data2) {
       res.render("showCategory.ejs", {
         thisCategory: data1,
-        posts: data2, 
+        posts: data2,
         err: ""
       })
     });
@@ -162,15 +168,15 @@ app.delete("/category/:id", function(req, res) {
         res.redirect("/categories")
       })
     } else {
-  db.get("SELECT categories.title, categories.id FROM categories WHERE id = ?", req.params.id, function(err, data1) {
-    db.all("SELECT posts.title, posts.id FROM posts WHERE category_id = ?", req.params.id, function(err, data2) {
-      res.render("showCategory.ejs", {
-        thisCategory: data1,
-        posts: data2,
-        err: "Cannot delete categories with posts"
-      })
-    });
-  });
+      db.get("SELECT categories.title, categories.id FROM categories WHERE id = ?", req.params.id, function(err, data1) {
+        db.all("SELECT posts.title, posts.id FROM posts WHERE category_id = ?", req.params.id, function(err, data2) {
+          res.render("showCategory.ejs", {
+            thisCategory: data1,
+            posts: data2,
+            err: "Cannot delete categories with posts"
+          })
+        });
+      });
     }
   });
 });
