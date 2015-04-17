@@ -186,5 +186,5 @@ app.delete("/category/:id", function(req, res) {
 
 ////////////////////////////////////////////////
 //This closes out th server and listens for the post
-app.listen(3000);
-console.log("Listening on port 3000")
+app.listen(80);
+console.log("Listening on port 80")
