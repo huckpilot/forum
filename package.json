@@ -16,13 +16,21 @@
     "start": "node server.js"
   },
   "author": "",
+<<<<<<< HEAD
   "license": "ISC",
+=======
+  "license": "BSD-2-Clause",
+>>>>>>> 6c910e97d8986b75650c7a3d642c4683163da2b6
   "repository": {
     "type": "git",
     "url": "https://github.com/huckpilot/forum.git"
   },
   "bugs": {
     "url": "https://github.com/huckpilot/forum/issues"
+<<<<<<< HEAD
   },
   "homepage": "https://github.com/huckpilot/forum"
+=======
+  }
+>>>>>>> 6c910e97d8986b75650c7a3d642c4683163da2b6
 }
