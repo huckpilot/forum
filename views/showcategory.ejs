@@ -5,6 +5,7 @@
     <form action="/subscriptions" method="POST">
       <input type="text" name="email" placeholder="Add email to subscribe" required>
       <input type="hidden" name="category_id" value="<%= thisCategory.id %>">
+      <input type="hidden" name="email" value="<%= email.email %>">
       <button>Subscribe to this seed</button>
     </form>
   </br>
