@@ -40,7 +40,7 @@ marked.setOptions({
 });
 
 // Sendgrid action
-var sendgrid  = require('sendgrid')("huckpilot", "Important1nes1");
+var sendgrid = require('sendgrid')("huckpilot", "Important1nes1");
 // var email     = new sendgrid.Email({
 //   to:       'huckpilot@gmail.com',
 //   from:     'huckpilot@gmail.com',
@@ -63,7 +63,9 @@ app.get("/", function(req, res) {
 ////////////////////////////////////////////////
 // This page is going to show all posts and all categories
 app.get("/forum", function(req, res) {
-  if(req.query.offset === undefined) { req.query.offset = 0; }
+  if (req.query.offset === undefined) {
+    req.query.offset = 0;
+  }
   db.all("SELECT posts.title, posts.body, posts.id, category_id FROM posts LIMIT 3 OFFSET ?", req.query.offset, function(err, data1) {
     //console.log(data1)
     db.all("SELECT categories.title, categories.id FROM categories", function(err, data2) {
@@ -103,9 +105,9 @@ app.post("/categories", function(req, res) {
 
 ////////////////////////////////////////////////
 // Add email to subscriptions table and redirect to the specified category and id
-app.post("/subscriptions", function(req, res){
-  db.run("INSERT INTO subscriptions (email) VALUES (?)", req.body.email, function(err){
-    res.redirect("/category/"+ req.body.category_id)
+app.post("/subscriptions", function(req, res) {
+  db.run("INSERT INTO subscriptions (email) VALUES (?)", req.body.email, function(err) {
+    res.redirect("/category/" + req.body.category_id)
   });
 });
 
@@ -121,23 +123,43 @@ app.get("/category/:id/newpost", function(req, res) {
   })
 })
 
+
+////////////////////////////////////////////////
+// This is reference for nesting requests
+// db.all("SELECT posts.title, posts.body, posts.id, category_id FROM posts LIMIT 3 OFFSET ?", req.query.offset, function(err, data1) {
+//   //console.log(data1)
+//   db.all("SELECT categories.title, categories.id FROM categories", function(err, data2) {
+//     //console.log(data2)
+//     res.render("index.ejs", {
+//       pTitles: data1,
+//       cTitles: data2,
+//       pagination: parseInt(req.query.offset) + 3,
+//     })
+//   });
+// });
+
+
+
 ////////////////////////////////////////////////
 // Add the new post to your category page
 app.post("/category/:id", function(req, res) {
-  db.run("INSERT INTO posts (title, body, image, category_id) VALUES(?, ?, ?, ?)", req.body.title, req.body.body, req.body.image, req.params.id, function(err) {
-    var email     = new sendgrid.Email({
-  to:       'huckpilot@gmail.com',
-  from:     'huckpilot@gmail.com',
-  subject:  req.body.title,
-  text:     req.body.body
-});
-sendgrid.send(email, function(err, json) {
-  if (err) { return console.error(err); }
-  console.log(json);
-});
-    res.redirect("/category/" + req.params.id)
+  db.all("SELECT * FROM subscriptions WHERE post.id = ?", req.params.id, function(err, data) {
+    db.run("INSERT INTO posts (title, body, image, category_id) VALUES(?, ?, ?, ?)", req.body.title, req.body.body, req.body.image, req.params.id, function(err) {
+      var email = new sendgrid.Email({
+        to: req.body.email,
+        from: 'huckpilot@gmail.com',
+        subject: req.body.title,
+        text: req.body.body
+      });
+      sendgrid.send(email, function(err, json) {
+        if (err) {
+          return console.error(err);
+        }
+        console.log(json);
+      });
+      res.redirect("/category/" + req.params.id, {email: data,})
+    });
   });
-
 });
 
 
@@ -145,15 +167,15 @@ sendgrid.send(email, function(err, json) {
 // Show individual post
 app.get("/category/:categoryid/post/:id", function(req, res) {
   db.get("SELECT * FROM posts WHERE id = ?", req.params.id, function(err, data1) {
-      var markdownArr = []
+    var markdownArr = []
       // console.log(data1)
-        for (i in data1){
-        markdownArr.push(data1.body)
-        }
-      // console.log(markdownArr)
-      var mark = markdownArr[0]
-      var marky = marked(mark)
-    //console.log(data1)
+    for (i in data1) {
+      markdownArr.push(data1.body)
+    }
+    // console.log(markdownArr)
+    var mark = markdownArr[0]
+    var marky = marked(mark)
+      //console.log(data1)
     db.all("SELECT comments.user_id, comments.body FROM comments WHERE post_id = ?", req.params.id, function(err, data2) {
       if (err) throw (err);
       res.render("showPost.ejs", {
@@ -185,8 +207,7 @@ app.put("/category/:categoryid/post/:id/vote", function(req, res) {
       db.run("UPDATE posts SET vote = ? WHERE id = ?", votes, req.params.id, function(err) {
         res.redirect("/category/" + req.params.categoryid + "/post/" + req.params.id)
       });
-    } 
-    else {
+    } else {
       var votes = voter - 1;
       db.run("UPDATE posts SET vote = ? WHERE id = ?", votes, req.params.id, function(err) {
         res.redirect("/category/" + req.params.categoryid + "/post/" + req.params.id)
