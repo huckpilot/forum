@@ -29,3 +29,21 @@ Please report this to https://github.com/chjj/marked.
     at marked (/root/forum/node_modules/marked/lib/marked.js:1207:31)
     at Statement.<anonymous> (/root/forum/server.js:122:19)
 Listening on port 80
+Listening on port 3000
+Listening on port 3000
+
+events.js:72
+        throw er; // Unhandled 'error' event
+              ^
+Error: listen EADDRINUSE
+    at errnoException (net.js:901:11)
+    at Server._listen2 (net.js:1039:14)
+    at listen (net.js:1061:10)
+    at Server.listen (net.js:1135:5)
+    at EventEmitter.app.listen (/root/forum/node_modules/express/lib/application.js:595:24)
+    at Object.<anonymous> (/root/forum/server.js:220:5)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+Listening on port 3000
