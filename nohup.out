@@ -47,3 +47,4 @@ Error: listen EADDRINUSE
     at Module.load (module.js:356:32)
     at Function.Module._load (module.js:312:12)
 Listening on port 3000
+Listening on port 3000
