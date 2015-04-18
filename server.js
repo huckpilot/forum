@@ -39,6 +39,19 @@ marked.setOptions({
   smartypants: false
 });
 
+// Sendgrid action
+var sendgrid  = require('sendgrid')("huckpilot", "Important1nes1");
+// var email     = new sendgrid.Email({
+//   to:       'huckpilot@gmail.com',
+//   from:     'huckpilot@gmail.com',
+//   subject:  'Subject goes here',
+//   text:     'Hello world'
+// });
+// sendgrid.send(email, function(err, json) {
+//   if (err) { return console.error(err); }
+//   console.log(json);
+// });
+
 
 
 ////////////////////////////////////////////////
@@ -112,8 +125,19 @@ app.get("/category/:id/newpost", function(req, res) {
 // Add the new post to your category page
 app.post("/category/:id", function(req, res) {
   db.run("INSERT INTO posts (title, body, image, category_id) VALUES(?, ?, ?, ?)", req.body.title, req.body.body, req.body.image, req.params.id, function(err) {
+    var email     = new sendgrid.Email({
+  to:       'huckpilot@gmail.com',
+  from:     'huckpilot@gmail.com',
+  subject:  req.body.title,
+  text:     req.body.body
+});
+sendgrid.send(email, function(err, json) {
+  if (err) { return console.error(err); }
+  console.log(json);
+});
     res.redirect("/category/" + req.params.id)
   });
+
 });
 
 

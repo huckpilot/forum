@@ -1,7 +1,7 @@
 {
   "name": "forum",
   "version": "1.0.0",
-  "description": "",
+  "description": "![Mockup](/images/seeder.jpg?raw=true \"Mockup\")",
   "main": "server.js",
   "dependencies": {
     "body-parser": "^1.12.2",
@@ -16,5 +16,13 @@
     "start": "node server.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huckpilot/forum.git"
+  },
+  "bugs": {
+    "url": "https://github.com/huckpilot/forum/issues"
+  },
+  "homepage": "https://github.com/huckpilot/forum"
 }
