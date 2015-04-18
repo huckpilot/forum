@@ -122,7 +122,7 @@ app.get("/category/:id/newpost", function(req, res) {
 })
 
 ////////////////////////////////////////////////
-// Add the new post to your category page
+// Add the new post to your category page and email it to myself. Look at sendgrid2 branch to see my attempt at pulling emails from subscriptions table(unsuccessful so far)
 app.post("/category/:id", function(req, res) {
   db.run("INSERT INTO posts (title, body, image, category_id) VALUES(?, ?, ?, ?)", req.body.title, req.body.body, req.body.image, req.params.id, function(err) {
     var email     = new sendgrid.Email({
