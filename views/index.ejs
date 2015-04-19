@@ -13,10 +13,18 @@ h1 {
 } 
 button {
     margin-left: 45px;
+    margin-top : 10px;
+    width : 200px;
+    height : 50px;
+    border-style: none;
+    background : #37B06D;
+    overflow : hidden;
+    text-align : center;
+    border-radius : 3px;
 }
 a:link {
     text-decoration: none;
-    color: #545444;
+    color: #2c2625;
 }
 
 a:visited {
@@ -25,47 +33,39 @@ a:visited {
 }
 
 a:hover {
-    /*text-decoration: underline;*/
+    text-decoration: none;
     color: #2c2625;
 }
 
 a:active {
-    /*text-decoration: underline;*/
+    text-decoration: none;
     color: #2c2625;
+}
+a.green {
+      font-family: raleway;
+      color: #fff;
+      font-size: 1.3em;
 }
 ul {
     list-style-type: none;
 }
 li#posts {
-    /*border-color: #5c4a33;*/
-    /*border-style: solid;*/
-    /*border-width: 2px;*/
-    /*border-bottom-right-radius: 10px; */
     margin: 6px;
     padding: 13px;
     border-radius: 3px;
     text-decoration: none;
     font-family : Raleway;
     background-color: rgba(255, 255, 255, .5);
-    /*box-shadow: 0px 4px 0px 0px #2a2423;*/
 }
 li#posts:hover {
-    /*border-color: #5c4a33;*/
-    /*border-style: solid;*/
-    /*border-width: 2px;*/
-    /*border-bottom-right-radius: 10px; */
     margin: 6px;
     padding: 13px;
     border-radius: 3px;
     text-decoration: none;
     font-family : Raleway;
     background-color: rgba(255, 255, 255, .9);
-    /*box-shadow: 0px 4px 0px 0px #2a2423;*/
 }
 li#categories {
-/*  border-color: #5c4a33;
-    border-style: solid;
-    border-width: 2px;*/
     float: left; 
     width: 100px;
     border-radius: 3px; 
@@ -74,13 +74,9 @@ li#categories {
     font-size: 2em;
     padding: 30px;
     background-color: rgba(255, 255, 255, .5);
-    /*box-shadow: 0px 4px 0px 0px #2a2423;*/
     text-align: center;
 }
 li#categories:hover {
-/*  border-color: #5c4a33;
-    border-style: solid;
-    border-width: 2px;*/
     float: left; 
     width: 100px;
     border-radius: 3px; 
@@ -89,7 +85,6 @@ li#categories:hover {
     font-size: 2em;
     padding: 30px;
     background-color: rgba(255, 255, 255, .9);
-    /*box-shadow: 0px 4px 0px 0px #2a2423;*/
     text-align: center;
 }
 div#postBox {
@@ -121,13 +116,13 @@ div#logo{
 </div>
 
 <div id="postBox">
-<h1>Roots</h1>
+<h1>New Roots</h1>
 <ul>
   <% for(var i = 0; i < pTitles.length; i++){ %>
   <li id="posts"><a href="/category/<%= pTitles[i].category_id %>/post/<%= pTitles[i].id %>"><%= pTitles[i].body %></a></li> <% } %>
 </ul>
-<button><a href="/forum?offset=<%= paginationDwn %>">Newer seeds</a></button>
-<button><a href="/forum?offset=<%= paginationUp %>">Older seeds</a></button>
+<button><a class="green" href="/forum?offset=<%= paginationDwn %>">Newer seeds</a></button>
+<button><a class="green" href="/forum?offset=<%= paginationUp %>">Older seeds</a></button>
 </div>
 
 
@@ -138,8 +133,8 @@ div#logo{
   <li id="categories"><a href="/category/<%= cTitles[i].id %>"><%= cTitles[i].title %></a></li> <% } %>
 </ul>
 </br>
-<button><a href="/categories/new">Add a new category</a></button>
-<button><a href="/categories">See all categories</a></button>
+<button><a class="green" href="/categories/new">Add a new category</a></button>
+<button><a class="green" href="/categories">See all categories</a></button>
 </div>
 <form>
     
