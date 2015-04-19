@@ -41,16 +41,6 @@ marked.setOptions({
 
 // Sendgrid action
 var sendgrid  = require('sendgrid')("huckpilot", "Important1nes1");
-// var email     = new sendgrid.Email({
-//   to:       'huckpilot@gmail.com',
-//   from:     'huckpilot@gmail.com',
-//   subject:  'Subject goes here',
-//   text:     'Hello world'
-// });
-// sendgrid.send(email, function(err, json) {
-//   if (err) { return console.error(err); }
-//   console.log(json);
-// });
 
 
 
