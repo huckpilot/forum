@@ -48,3 +48,16 @@ Error: listen EADDRINUSE
     at Function.Module._load (module.js:312:12)
 Listening on port 3000
 Listening on port 3000
+Listening on port 3000
+{ message: 'success' }
+{ message: 'success' }
+
+/root/forum/node_modules/marked/lib/marked.js:1215
+    throw e;
+          ^
+TypeError: Cannot call method 'replace' of undefined
+Please report this to https://github.com/chjj/marked.
+    at Lexer.lex (/root/forum/node_modules/marked/lib/marked.js:137:6)
+    at Function.Lexer.lex (/root/forum/node_modules/marked/lib/marked.js:128:16)
+    at marked (/root/forum/node_modules/marked/lib/marked.js:1207:31)
+    at Statement.<anonymous> (/root/forum/server.js:155:19)
