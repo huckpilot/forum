@@ -42,6 +42,8 @@ marked.setOptions({
 // Sendgrid action
 var sendgrid  = require('sendgrid')("huckpilot", "Important1nes1");
 
+// Allows use of static files
+app.use(express.static('public'));
 
 
 ////////////////////////////////////////////////
@@ -54,7 +56,7 @@ app.get("/", function(req, res) {
 // This page is going to show all posts and all categories
 app.get("/forum", function(req, res) {
   if(req.query.offset === undefined) { req.query.offset = 0; }
-  db.all("SELECT posts.title, posts.body, posts.id, category_id FROM posts LIMIT 4 OFFSET ?", req.query.offset, function(err, data1) {
+  db.all("SELECT posts.title, posts.body, posts.id, category_id FROM posts ORDER BY VOTE DESC LIMIT 4 OFFSET ?", req.query.offset, function(err, data1) {
     //console.log(data1)
     db.all("SELECT categories.title, categories.id FROM categories", function(err, data2) {
       //console.log(data2)
@@ -116,16 +118,16 @@ app.get("/category/:id/newpost", function(req, res) {
 // Add the new post to your category page and email it to myself. Look at sendgrid2 branch to see my attempt at pulling emails from subscriptions table(unsuccessful so far)
 app.post("/category/:id", function(req, res) {
   db.run("INSERT INTO posts (title, body, image, category_id) VALUES(?, ?, ?, ?)", req.body.title, req.body.body, req.body.image, req.params.id, function(err) {
-    var email     = new sendgrid.Email({
-  to:       'huckpilot@gmail.com',
-  from:     'huckpilot@gmail.com',
-  subject:  req.body.title,
-  text:     req.body.body
-});
-sendgrid.send(email, function(err, json) {
-  if (err) { return console.error(err); }
-  console.log(json);
-});
+      var email     = new sendgrid.Email({
+      to:       'huckpilot@gmail.com',
+      from:     'huckpilot@gmail.com',
+      subject:  req.body.title,
+      text:     req.body.body
+    });
+    sendgrid.send(email, function(err, json) {
+      if (err) { return console.error(err); }
+        console.log(json);
+    });
     res.redirect("/category/" + req.params.id)
   });
 
@@ -185,6 +187,8 @@ app.put("/category/:categoryid/post/:id/vote", function(req, res) {
     }
   });
 });
+
+
 
 ////////////////////////////////////////////////
 // Show individual category

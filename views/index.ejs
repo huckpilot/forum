@@ -112,11 +112,11 @@ div#logo{
 <body>
 
 <div id="logo">
-<a href="http://imgur.com/1plKxi4"><img src="http://i.imgur.com/1plKxi4.png" title="source: imgur.com" /></a>
+<img src="/images/logo2.png" </a>
 </div>
 
 <div id="postBox">
-<h1>New Roots</h1>
+<h1>Highest Rated Seeds</h1>
 <ul>
   <% for(var i = 0; i < pTitles.length; i++){ %>
   <li id="posts"><a href="/category/<%= pTitles[i].category_id %>/post/<%= pTitles[i].id %>"><%= pTitles[i].body %></a></li> <% } %>
@@ -127,7 +127,7 @@ div#logo{
 
 
 <div id="catBox">
-<h1>Seeds</h1>
+<h1>Roots</h1>
 <ul>
   <% for(var i = 0; i < cTitles.length; i++){ %>
   <li id="categories"><a href="/category/<%= cTitles[i].id %>"><%= cTitles[i].title %></a></li> <% } %>
