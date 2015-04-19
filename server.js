@@ -41,16 +41,6 @@ marked.setOptions({
 
 // Sendgrid action
 var sendgrid  = require('sendgrid')("huckpilot", "Important1nes1");
-// var email     = new sendgrid.Email({
-//   to:       'huckpilot@gmail.com',
-//   from:     'huckpilot@gmail.com',
-//   subject:  'Subject goes here',
-//   text:     'Hello world'
-// });
-// sendgrid.send(email, function(err, json) {
-//   if (err) { return console.error(err); }
-//   console.log(json);
-// });
 
 
 
@@ -64,14 +54,15 @@ app.get("/", function(req, res) {
 // This page is going to show all posts and all categories
 app.get("/forum", function(req, res) {
   if(req.query.offset === undefined) { req.query.offset = 0; }
-  db.all("SELECT posts.title, posts.body, posts.id, category_id FROM posts LIMIT 3 OFFSET ?", req.query.offset, function(err, data1) {
+  db.all("SELECT posts.title, posts.body, posts.id, category_id FROM posts LIMIT 4 OFFSET ?", req.query.offset, function(err, data1) {
     //console.log(data1)
     db.all("SELECT categories.title, categories.id FROM categories", function(err, data2) {
       //console.log(data2)
       res.render("index.ejs", {
         pTitles: data1,
         cTitles: data2,
-        pagination: parseInt(req.query.offset) + 3,
+        paginationUp: parseInt(req.query.offset) + 4,
+        paginationDwn: parseInt(req.query.offset) - 4,
       })
     });
   });
