@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <body>
   <h1><%= thisCategory.title %></h1>
+  <h5>Seed Quality: <%= thisCategory.vote %></h5>
+  </br>
+
+  <!-- This is my vote section -->
+
+<form method="POST" action="/category/<%= thisCategory.id %>/vote/?_method=PUT">
+  <input type="hidden" name="vote" value="up">
+  <button>Good seed</button>
+</form>
+<form method="POST" action="/category/<%= thisCategory.id %>/vote/?_method=PUT">
+  <input type="hidden" name="vote" value="down">
+  <button>Bad seed</button>
+</form>
+
+
+<!-- This is my comment section -->
+
   </br>
     <form action="/subscriptions" method="POST">
       <input type="text" name="email" placeholder="Add email to subscribe" required>

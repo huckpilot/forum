@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS categories;
 CREATE TABLE categories (
   id INTEGER PRIMARY KEY,
-  title TEXT, user_id INT, brief TEXT, image TEXT, 
+  title TEXT, user_id INT, brief TEXT, image TEXT, vote INT, 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

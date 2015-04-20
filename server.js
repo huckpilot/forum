@@ -40,7 +40,7 @@ marked.setOptions({
 });
 
 // Sendgrid action
-var sendgrid  = require('sendgrid')("huckpilot", "Important1nes1");
+var sendgrid = require('sendgrid')("huckpilot", "Important1nes1");
 
 // Allows use of static files
 app.use(express.static('public'));
@@ -55,10 +55,12 @@ app.get("/", function(req, res) {
 ////////////////////////////////////////////////
 // This page is going to show all posts and all categories
 app.get("/forum", function(req, res) {
-  if(req.query.offset === undefined) { req.query.offset = 0; }
+  if (req.query.offset === undefined) {
+    req.query.offset = 0;
+  }
   db.all("SELECT posts.title, posts.body, posts.id, category_id FROM posts ORDER BY VOTE DESC LIMIT 4 OFFSET ?", req.query.offset, function(err, data1) {
     //console.log(data1)
-    db.all("SELECT categories.title, categories.id FROM categories", function(err, data2) {
+    db.all("SELECT categories.title, categories.id FROM categories ORDER BY VOTE DESC", function(err, data2) {
       //console.log(data2)
       res.render("index.ejs", {
         pTitles: data1,
@@ -96,9 +98,9 @@ app.post("/categories", function(req, res) {
 
 ////////////////////////////////////////////////
 // Add email to subscriptions table and redirect to the specified category and id
-app.post("/subscriptions", function(req, res){
-  db.run("INSERT INTO subscriptions (email) VALUES (?)", req.body.email, function(err){
-    res.redirect("/category/"+ req.body.category_id)
+app.post("/subscriptions", function(req, res) {
+  db.run("INSERT INTO subscriptions (email) VALUES (?)", req.body.email, function(err) {
+    res.redirect("/category/" + req.body.category_id)
   });
 });
 
@@ -118,15 +120,17 @@ app.get("/category/:id/newpost", function(req, res) {
 // Add the new post to your category page and email it to myself. Look at sendgrid2 branch to see my attempt at pulling emails from subscriptions table(unsuccessful so far)
 app.post("/category/:id", function(req, res) {
   db.run("INSERT INTO posts (title, body, image, category_id) VALUES(?, ?, ?, ?)", req.body.title, req.body.body, req.body.image, req.params.id, function(err) {
-      var email     = new sendgrid.Email({
-      to:       'huckpilot@gmail.com',
-      from:     'huckpilot@gmail.com',
-      subject:  req.body.title,
-      text:     req.body.body
+    var email = new sendgrid.Email({
+      to: 'huckpilot@gmail.com',
+      from: 'huckpilot@gmail.com',
+      subject: req.body.title,
+      text: req.body.body
     });
     sendgrid.send(email, function(err, json) {
-      if (err) { return console.error(err); }
-        console.log(json);
+      if (err) {
+        return console.error(err);
+      }
+      console.log(json);
     });
     res.redirect("/category/" + req.params.id)
   });
@@ -138,15 +142,15 @@ app.post("/category/:id", function(req, res) {
 // Show individual post
 app.get("/category/:categoryid/post/:id", function(req, res) {
   db.get("SELECT * FROM posts WHERE id = ?", req.params.id, function(err, data1) {
-      var markdownArr = []
+    var markdownArr = []
       // console.log(data1)
-        for (i in data1){
-        markdownArr.push(data1.body)
-        }
-      // console.log(markdownArr)
-      var mark = markdownArr[0]
-      var marky = marked(mark)
-    //console.log(data1)
+    for (i in data1) {
+      markdownArr.push(data1.body)
+    }
+    // console.log(markdownArr)
+    var mark = markdownArr[0]
+    var marky = marked(mark)
+      //console.log(data1)
     db.all("SELECT comments.user_id, comments.body FROM comments WHERE post_id = ?", req.params.id, function(err, data2) {
       if (err) throw (err);
       res.render("showPost.ejs", {
@@ -167,7 +171,7 @@ app.post("/category/:categoryid/post/:id/comments", function(req, res) {
 });
 
 //////////////////////////////////////////////
-// This is where I increase/decrease my up/down vote counter
+// This is where I increase/decrease my up/down vote counter for posts
 app.put("/category/:categoryid/post/:id/vote", function(req, res) {
   db.get("SELECT posts.vote FROM posts WHERE posts.id = ?", req.params.id, function(err, data1) {
     var voter = data1.vote;
@@ -178,8 +182,7 @@ app.put("/category/:categoryid/post/:id/vote", function(req, res) {
       db.run("UPDATE posts SET vote = ? WHERE id = ?", votes, req.params.id, function(err) {
         res.redirect("/category/" + req.params.categoryid + "/post/" + req.params.id)
       });
-    } 
-    else {
+    } else {
       var votes = voter - 1;
       db.run("UPDATE posts SET vote = ? WHERE id = ?", votes, req.params.id, function(err) {
         res.redirect("/category/" + req.params.categoryid + "/post/" + req.params.id)
@@ -188,54 +191,70 @@ app.put("/category/:categoryid/post/:id/vote", function(req, res) {
   });
 });
 
-
-
-////////////////////////////////////////////////
-// Show individual category
-app.get("/category/:id", function(req, res) {
-  db.get("SELECT categories.title, categories.id FROM categories WHERE id = ?", req.params.id, function(err, data1) {
-    db.all("SELECT posts.title, posts.id FROM posts WHERE category_id = ?", req.params.id, function(err, data2) {
-      res.render("showcategory.ejs", {
-        thisCategory: data1,
-        posts: data2,
-        err: ""
-      })
-    });
-  });
+//////////////////////////////////////////////
+// This is where I increase/decrease my up/down vote counter for categories
+app.put("/category/:id/vote", function(req, res) {
+      db.get("SELECT categories.vote FROM categories WHERE categories.id = ?", req.params.id, function(err, data) {
+          var voter = data.vote;
+          if (req.body.vote === "up") {
+            var votes = voter + 1;
+            db.run("UPDATE categories SET vote = ? WHERE id = ?", votes, req.params.id, function(err) {
+              res.redirect("/category/" + req.params.id)
+            });
+          } else {
+            var votes = voter - 1;
+            db.run("UPDATE categories SET vote = ? WHERE id = ?", votes, req.params.id, function(err) {
+              res.redirect("/category/" + req.params.id)
+            });
+          }
+      });
 });
 
-////////////////////////////////////////////////
-// Delete a post
-app.delete("/post/:id", function(req, res) {
-  db.run("DELETE FROM posts WHERE id = ?", req.params.id, function(err) {
-    res.redirect("/forum");
-  })
-})
-
-////////////////////////////////////////////////
-// IF there are no posts in a category, delete category is enabled.
-app.delete("/category/:id", function(req, res) {
-  db.all("SELECT * FROM posts WHERE category_id = ?", req.params.id, function(err, data) {
-    if (data.length === 0) {
-      db.run("DELETE FROM categories WHERE id = ?", req.params.id, function(err) {
-        res.redirect("/categories")
-      })
-    } else {
-      db.get("SELECT categories.title, categories.id FROM categories WHERE id = ?", req.params.id, function(err, data1) {
+    ////////////////////////////////////////////////
+    // Show individual category
+    app.get("/category/:id", function(req, res) {
+      db.get("SELECT categories.title, categories.id, categories.vote FROM categories WHERE id = ?", req.params.id, function(err, data1) {
         db.all("SELECT posts.title, posts.id FROM posts WHERE category_id = ?", req.params.id, function(err, data2) {
           res.render("showcategory.ejs", {
             thisCategory: data1,
             posts: data2,
-            err: "Cannot delete categories with posts"
+            err: ""
           })
         });
       });
-    }
-  });
-});
+    });
+
+    ////////////////////////////////////////////////
+    // Delete a post
+    app.delete("/post/:id", function(req, res) {
+      db.run("DELETE FROM posts WHERE id = ?", req.params.id, function(err) {
+        res.redirect("/forum");
+      })
+    })
+
+    ////////////////////////////////////////////////
+    // IF there are no posts in a category, delete category is enabled.
+    app.delete("/category/:id", function(req, res) {
+      db.all("SELECT * FROM posts WHERE category_id = ?", req.params.id, function(err, data) {
+        if (data.length === 0) {
+          db.run("DELETE FROM categories WHERE id = ?", req.params.id, function(err) {
+            res.redirect("/categories")
+          })
+        } else {
+          db.get("SELECT categories.title, categories.id FROM categories WHERE id = ?", req.params.id, function(err, data1) {
+            db.all("SELECT posts.title, posts.id FROM posts WHERE category_id = ?", req.params.id, function(err, data2) {
+              res.render("showcategory.ejs", {
+                thisCategory: data1,
+                posts: data2,
+                err: "Cannot delete categories with posts"
+              })
+            });
+          });
+        }
+      });
+    });
 
 
-////////////////////////////////////////////////
-//This closes out th server and listens for the post
-app.listen(3000);
-console.log("Listening on port 3000")
+    ////////////////////////////////////////////////
+    //This closes out th server and listens for the post
+    app.listen(3000); console.log("Listening on port 3000")
