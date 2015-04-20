@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <body>
   <h1><%= thisCategory.title %></h1>
-  <h5>Seed Quality: <%= thisCategory.vote %></h5>
+  <h5>Root Quality: <%= thisCategory.vote %></h5>
   </br>
 
   <!-- This is my vote section -->
 
 <form method="POST" action="/category/<%= thisCategory.id %>/vote/?_method=PUT">
   <input type="hidden" name="vote" value="up">
-  <button>Good seed</button>
+  <button>Good root</button>
 </form>
 <form method="POST" action="/category/<%= thisCategory.id %>/vote/?_method=PUT">
   <input type="hidden" name="vote" value="down">
-  <button>Bad seed</button>
+  <button>Bad root</button>
 </form>
 
 
@@ -22,7 +22,7 @@
     <form action="/subscriptions" method="POST">
       <input type="text" name="email" placeholder="Add email to subscribe" required>
       <input type="hidden" name="category_id" value="<%= thisCategory.id %>">
-      <button>Subscribe to this seed</button>
+      <button>Subscribe to this root</button>
     </form>
   </br>
   <ul>
@@ -34,10 +34,10 @@
   <p><%= err %></p>
   <% } %>
   <form method="POST" action="/category/<%= thisCategory.id %>?_method=DELETE">
-    <button>Delete this category</button>
+    <button>Delete this root</button>
   </form>
   </br>
-  <a href="/category/<%= thisCategory.id %>/newpost">Create a new post</a>
+  <a href="/category/<%= thisCategory.id %>/newpost">Create a new seed in this root</a>
   </br>
-  <a href="/categories">Go back to categories list</a>
+  <a href="/categories">Go back to roots list</a>
 </body>

@@ -117,25 +117,25 @@ div#logo{
 </div>
 
 <div id="postBox">
-<h1>Highest Rated Seeds</h1>
+<h1>Most popular seeds</h1>
 <ul>
   <% for(var i = 0; i < pTitles.length; i++){ %>
   <li id="posts"><a href="/category/<%= pTitles[i].category_id %>/post/<%= pTitles[i].id %>"><%= pTitles[i].body %></a></li> <% } %>
 </ul>
-<button><a class="green" href="/forum?offset=<%= paginationDwn %>">Newer seeds</a></button>
-<button><a class="green" href="/forum?offset=<%= paginationUp %>">Older seeds</a></button>
+<button><a class="green" href="/forum?offset=<%= paginationDwn %>">Lesser seeds</a></button>
+<button><a class="green" href="/forum?offset=<%= paginationUp %>">Greater seeds</a></button>
 </div>
 
 
 <div id="catBox">
-<h1>Roots</h1>
+<h1>Most popular roots</h1>
 <ul>
   <% for(var i = 0; i < cTitles.length; i++){ %>
   <li id="categories"><a href="/category/<%= cTitles[i].id %>"><%= cTitles[i].title %></a></li> <% } %>
 </ul>
 </br>
-<button><a class="green" href="/categories/new">Add a new category</a></button>
-<button><a class="green" href="/categories">See all categories</a></button>
+<button><a class="green" href="/categories/new">Add a new root</a></button>
+<button><a class="green" href="/categories">See all roots</a></button>
 </div>
 <form>
     
