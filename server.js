@@ -27,17 +27,17 @@ var methodOverride = require("method-override");
 app.use(methodOverride("_method"))
 
 // require marked
-var marked = require('marked');
-marked.setOptions({
-  renderer: new marked.Renderer(),
-  gfm: true,
-  tables: true,
-  breaks: false,
-  pedantic: false,
-  sanitize: true,
-  smartLists: true,
-  smartypants: false
-});
+// var marked = require('marked');
+// marked.setOptions({
+//   renderer: new marked.Renderer(),
+//   gfm: true,
+//   tables: true,
+//   breaks: false,
+//   pedantic: false,
+//   sanitize: true,
+//   smartLists: true,
+//   smartypants: false
+// });
 
 // Sendgrid action
 var sendgrid = require('sendgrid')("huckpilot", "Important1nes1");
@@ -99,7 +99,7 @@ app.post("/categories", function(req, res) {
 ////////////////////////////////////////////////
 // Add email to subscriptions table and redirect to the specified category and id
 app.post("/subscriptions", function(req, res) {
-  db.run("INSERT INTO subscriptions (email) VALUES (?)", req.body.email, function(err) {
+  db.run("INSERT INTO subscriptions (email, category_id) VALUES (?, ?)", req.body.email, req.body.category_id, function(err) {
     res.redirect("/category/" + req.body.category_id)
   });
 });
@@ -120,21 +120,26 @@ app.get("/category/:id/newpost", function(req, res) {
 // Add the new post to your category page and email it to myself. Look at sendgrid2 branch to see my attempt at pulling emails from subscriptions table(unsuccessful so far)
 app.post("/category/:id", function(req, res) {
   db.run("INSERT INTO posts (title, body, image, category_id) VALUES(?, ?, ?, ?)", req.body.title, req.body.body, req.body.image, req.params.id, function(err) {
-    var email = new sendgrid.Email({
-      to: 'huckpilot@gmail.com',
-      from: 'huckpilot@gmail.com',
-      subject: req.body.title,
-      text: req.body.body
-    });
-    sendgrid.send(email, function(err, json) {
-      if (err) {
-        return console.error(err);
+    db.all("SELECT * FROM subscriptions WHERE category_id = ?", req.params.id, function(err, data){
+      console.log(data);
+      for(var i = 0; i < data.length; i++){ 
+        console.log("heyo")
+        var email = new sendgrid.Email({
+          to: data[i].email,
+          from: 'huckpilot@gmail.com',
+          subject: req.body.title,
+          text: req.body.body
+        });
+        sendgrid.send(email, function(err, json) {
+          if (err) {
+            return console.error(err);
+          }
+          console.log(json);
+        });
       }
-      console.log(json);
-    });
     res.redirect("/category/" + req.params.id)
+    });
   });
-
 });
 
 
