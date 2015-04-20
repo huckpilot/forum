@@ -26,18 +26,18 @@ var methodOverride = require("method-override");
 // Tells app which override method to use
 app.use(methodOverride("_method"))
 
-// require marked
-// var marked = require('marked');
-// marked.setOptions({
-//   renderer: new marked.Renderer(),
-//   gfm: true,
-//   tables: true,
-//   breaks: false,
-//   pedantic: false,
-//   sanitize: true,
-//   smartLists: true,
-//   smartypants: false
-// });
+//require marked
+var marked = require('marked');
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false
+});
 
 // Sendgrid action
 var sendgrid = require('sendgrid')("huckpilot", "Important1nes1");
